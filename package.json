@@ -11,8 +11,7 @@
     "express": "4.17.1",
     "express-validator": "6.11.1",
     "mongoose": "5.12.9",
-    "mongoose-validator": "2.1.0",
-    "nodeom": "0.0.1"
+    "mongoose-validator": "2.1.0"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
