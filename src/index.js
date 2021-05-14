@@ -2,12 +2,12 @@ const express = require("express");
 
 require("dotenv").config();
 
-const inicializaMongoServer = require("./config/db");
+const inicializaMongoServer = require("../config/db");
 
 inicializaMongoServer(); //iniciando o mongodb
 
 //definindo as rotas tas aplicação
-const rotasEmpresa = require(".routes/Empresa");
+const rotasEmpresa = require("../routes/Empresa");
 
 //inicializa o app a partir da biblioteca express
 const app = express();
