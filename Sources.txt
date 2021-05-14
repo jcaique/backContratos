@@ -1,3 +1,5 @@
+Based on Ricardo Leme classes
+
 https://snyk.io/advisor/npm-package/mongoose-validators
 
 https://flaviocopes.com/express-validate-input/
