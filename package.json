@@ -12,7 +12,7 @@
     "express-validator": "6.11.1",
     "mongoose": "5.12.9",
     "mongoose-validator": "2.1.0",
-    "nodemon": "0.0.1"
+    "nodeom": "0.0.1"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
