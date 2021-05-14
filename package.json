@@ -1,0 +1,21 @@
+{
+  "name": "backcontratos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "9.0.2",
+    "express": "4.17.1",
+    "express-validator": "6.11.1",
+    "mongoose": "5.12.9",
+    "mongoose-validator": "2.1.0",
+    "nodemon": "0.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.4"
+  },
+  "keywords": []
+}

@@ -1,0 +1,12 @@
+//Teste de requisiçoes REST - Empresas
+
+@baseURL = http://localhost:4000
+@id = '132456789'
+
+###
+//GET - Listar todas as empresas
+GET {{baseURL}}/categorias
+Content-Type: application/json
+
+
+###
