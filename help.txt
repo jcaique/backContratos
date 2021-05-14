@@ -2,3 +2,5 @@ https://snyk.io/advisor/npm-package/mongoose-validators
 
 https://flaviocopes.com/express-validate-input/
 
+https://docs.mongodb.com/manual/tutorial/query-documents/
+
