@@ -17,15 +17,15 @@ router.get("/", async (req, res) => {
 });
 
 //método GET "/empresas/id" - Lista uma empresa de um determinado id
-router.get("/:id", async (req, res) => {
+router.get("/:cnpj", async (req, res) => {
   try {
-    const empresa = await Empresa.findById(req.params.id);
+    const empresa = await Empresa.find({ cnpj : req.params.cnpj});
     res.json(empresa);
   } catch (error) {
     res.status(500).send({
       errors: [
         {
-          message: `A empresa com o id ${req.params.id} solicitada, não foi encontrada!`
+          message: `A empresa com o id ${req.params.cnpj} solicitada, não foi encontrada!`
         }
       ]
     });
@@ -34,12 +34,13 @@ router.get("/:id", async (req, res) => {
 
 //método POST "/empresa/" - Para incluir uma nova empresa
 const validaEmpresa = [
-  check("nome", "Informe um nome com no máx 100 caracteres").not().isEmpty(),
-  check("cnpj", "O cnpj precisa ser numérico").not().isNumeric(),
+  check("nome", "Voce precisa informar o nome").not().isEmpty(),
+  //check("cnpj", "O cnpj precisa ser numérico").not().isNumeric(),
   check("cnpj", "O cnpj precisa de tamanho igual a 14").isLength({
     min: 14,
     max: 14
-  })
+  }),
+  check("cnpj", "O cnpj precisa ser numerico").isNumeric()
 ];
 
 router.post("/", validaEmpresa, async (req, res) => {
@@ -53,13 +54,15 @@ router.post("/", validaEmpresa, async (req, res) => {
   }
 
   //verificar se a empresa já existe
-  const cnpj = req.body;
+  const cnpj = req.body.cnpj; //quebrei a cabeça coloquei: cnpj = req.body
   let empresa = await Empresa.findOne({ cnpj });
 
-  if (empresa)
+  if (empresa) {
     return res
       .status(200)
       .json({ erros: [{ message: "Já existe uma empresa com este cnpj" }] });
+  }
+
 
   try {
     let empresa = new Empresa(req.body);
@@ -123,4 +126,4 @@ router.delete("/", async (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = router

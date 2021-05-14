@@ -7,28 +7,28 @@ const cnpjValidator = [
     validator: "isLength",
     arguments: [14],
     message: "O cnpj precisa ser igual a 14 caracteres sem pontos"
-  }),
+  },
   validate({
     validator: "isNumeric",
-    message: "O cnpj precisa ser numérico"
-  })
+    message: 'O cnpj precisa ser numerico'
+  }))
 ];
 
-const EmpresaSchema = mongoose.Schema(
-  {
-    nome: {
-      type: String,
-      required: true,
-      uppercase: true
-    },
-    cnpj: {
-      type: String,
-      required: true,
-      unique: true,
-      validator: cnpjValidator
-    }
-  },
-  { timestamps: true }
-);
 
-module.exports = mongoose.model("empresa", EmpresaSchema);
+const EmpresaSchema = new mongoose.Schema({
+  nome: {
+    type: String,
+    required: true,
+    uppercase: true
+  },
+  cnpj: {
+    type: String,
+    required: true,
+    unique: true,
+    validator: cnpjValidator
+  }
+}, { timestamps: true} );
+
+
+
+module.exports = mongoose.model('empresa', EmpresaSchema);

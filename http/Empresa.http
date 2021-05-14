@@ -1,12 +1,31 @@
 //Teste de requisiçoes REST - Empresas
 
 @baseURL = http://localhost:4000
-@id = '132456789'
+@cnpj = "11111111111111"
 
 ###
-//GET - Listar todas as empresas
-GET {{baseURL}}/categorias
+// GET/ - Listar todas as empresas
+GET {{baseURL}}/empresas
 Content-Type: application/json
 
 
 ###
+// GET/empresas/:id - Lista uma empresa por seu id
+GET {{baseURL}}/empresas/cnpj
+Content-Type: application/json
+
+
+###
+//POST - Insere uma nova empresa
+POST {{baseURL}}/empresas
+Content-Type: application/json
+
+{
+    "nome" : "Empresa TESTE Foda",
+    "cnpj" : "11111111111111"
+}
+
+
+###
+
+
