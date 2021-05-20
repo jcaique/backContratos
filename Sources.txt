@@ -1,4 +1,4 @@
-Based on Ricardo Leme classes
+Based on Ricardo's classes
 
 https://snyk.io/advisor/npm-package/mongoose-validators
 
@@ -6,3 +6,4 @@ https://flaviocopes.com/express-validate-input/
 
 https://docs.mongodb.com/manual/tutorial/query-documents/
 
+https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html

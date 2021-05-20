@@ -110,7 +110,7 @@ router.put("/", validaEmpresa, async (req, res) => {
 });
 
 //método DELETE "/"  - Delete uma empresa
-router.delete("/", async (req, res) => {
+router.delete("/:cnpj", async (req, res) => {
   await Empresa.findByIdAndRemove(req.params.id)
     .then((empresa) => {
       res.send({ message: `Empresa ${empresa.nome} removida com sucesso!` });
@@ -119,7 +119,7 @@ router.delete("/", async (req, res) => {
       return res.status(500).send({
         errors: [
           {
-            message: `Não foi possivel remover a categoria com o id ${req.params.id}`
+            message: `Não foi possivel remover a categoria com o id ${req.params.cnpj}`
           }
         ]
       });
