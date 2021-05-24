@@ -25,7 +25,7 @@ router.get("/:cnpj", async (req, res) => {
     res.status(500).send({
       errors: [
         {
-          message: `A empresa com o id ${req.params.cnpj} solicitada, não foi encontrada!`
+          message: `A empresa com o id ${req.params.cnpj} solicitada, não foi encontrada! ${error.message}`
         }
       ]
     });
@@ -89,21 +89,29 @@ router.put("/:cnpj", validaEmpresa, async (req, res) => {
       errors: errors.array()
     });
   }
-s
-  let dados = req.body.nome;
+
+  let _nome = req.body.nome;
   let _cnpj = req.body.cnpj;
 
+  let cnpjBusca = req.params.cnpj; //cnpj para fazer a busca no banco, pega do parametro que está sendo passado.
+
   await Empresa.findOneAndUpdate(
-    {cnpj : {_cnpj}},
+    { cnpj: cnpjBusca },
     {
-      $set: dados
+      $set: {
+        nome: _nome,
+        cnpj: _cnpj
+      }
     },
     {
       new: true,
     }
   )
     .then((empresa) => {
-      res.send({ message: `Empresa ${empresa.nome} alterada com sucesso!` });
+      res.send({
+        message: `Empresa "${empresa.nome}" com o CNPJ "${empresa.cnpj}"
+          atualizada para ${_nome} e CNPJ ${_cnpj} com sucesso!`
+      });
     })
     .catch((error) => {
       return res.status(500).send({
