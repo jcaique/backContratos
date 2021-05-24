@@ -1,11 +1,11 @@
 const express = require("express");
-const router = express.Router();
+const rota = express.Router();
 const { check, validationResult } = require("express-validator");
 
 const Empresa = require("../model/Empresa");
 
 //método GET "/empresas/" - Lista todas as empresas
-router.get("/", async (req, res) => {
+rota.get("/", async (req, res) => {
   try {
     const empresas = await Empresa.find();
     res.json(empresas);
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 //método GET "/empresas/:cnpj" - Lista uma empresa de um determinado cnpj
-router.get("/:cnpj", async (req, res) => {
+rota.get("/:cnpj", async (req, res) => {
   try {
     const empresa = await Empresa.find({ cnpj: req.params.cnpj });
     res.json(empresa);
@@ -25,7 +25,7 @@ router.get("/:cnpj", async (req, res) => {
     res.status(500).send({
       errors: [
         {
-          message: `A empresa com o id ${req.params.cnpj} solicitada, não foi encontrada! ${error.message}`
+          message: `A empresa com o cnpj ${req.params.cnpj} solicitada, não foi encontrada! ${error.message}`
         }
       ]
     });
@@ -44,7 +44,7 @@ const validaEmpresa = [
   check("cnpj", "O cnpj precisa ser numerico").isNumeric()
 ];
 
-router.post("/", validaEmpresa, async (req, res) => {
+rota.post("/", validaEmpresa, async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -64,7 +64,6 @@ router.post("/", validaEmpresa, async (req, res) => {
       .json({ erros: [{ message: "Já existe uma empresa com este cnpj" }] });
   }
 
-
   try {
     let empresa = new Empresa(req.body);
     await empresa.save();
@@ -81,7 +80,7 @@ router.post("/", validaEmpresa, async (req, res) => {
 
 
 //PUT "/empresas" - Altera os dados de uma empresa
-router.put("/:cnpj", validaEmpresa, async (req, res) => {
+rota.put("/:cnpj", validaEmpresa, async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -90,9 +89,17 @@ router.put("/:cnpj", validaEmpresa, async (req, res) => {
     });
   }
 
+  //fazendo uma busca no banco para ver se existe o cnpj informado
+  let empresa = await Empresa.findOne({ cnpj : req.params.cnpj })
+  if (!empresa) {
+    return res //caso exista é retornado o cod de erro 200
+      .status(200)
+      .json({ erros: [{ message: "CNPJ informado não encontrado!" }] });
+  }
+
+  //_nome e _cnpj recebem do corpo da requisição o que será setado como novo
   let _nome = req.body.nome;
   let _cnpj = req.body.cnpj;
-
   let cnpjBusca = req.params.cnpj; //cnpj para fazer a busca no banco, pega do parametro que está sendo passado.
 
   await Empresa.findOneAndUpdate(
@@ -109,8 +116,7 @@ router.put("/:cnpj", validaEmpresa, async (req, res) => {
   )
     .then((empresa) => {
       res.send({
-        message: `Empresa "${empresa.nome}" com o CNPJ "${empresa.cnpj}"
-          atualizada para ${_nome} e CNPJ ${_cnpj} com sucesso!`
+        message: `${empresa.nome} atualizada com sucesso!`
       });
     })
     .catch((error) => {
@@ -124,9 +130,10 @@ router.put("/:cnpj", validaEmpresa, async (req, res) => {
     });
 });
 
+
 //método DELETE "/"  - Delete uma empresa
-router.delete("/:cnpj", async (req, res) => {
-  await Empresa.findByIdAndRemove(req.params.cnpj)
+rota.delete("/:cnpj", async (req, res) => {
+  await Empresa.findOneAndRemove(req.params.cnpj)
     .then((empresa) => {
       res.send({ message: `Empresa ${empresa.nome} removida com sucesso!` });
     })
@@ -134,11 +141,12 @@ router.delete("/:cnpj", async (req, res) => {
       return res.status(500).send({
         errors: [
           {
-            message: `Não foi possivel remover a categoria com o cnpj ${req.params.cnpj}`
+            message: `Não foi possivel remover a empresae com o cnpj ${req.params.cnpj}
+            ${error}`
           }
         ]
       });
     });
 });
 
-module.exports = router
+module.exports = rota
