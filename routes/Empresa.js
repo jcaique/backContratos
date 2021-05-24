@@ -16,10 +16,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-//método GET "/empresas/id" - Lista uma empresa de um determinado id
+//método GET "/empresas/:cnpj" - Lista uma empresa de um determinado cnpj
 router.get("/:cnpj", async (req, res) => {
   try {
-    const empresa = await Empresa.find({ cnpj : req.params.cnpj});
+    const empresa = await Empresa.find({ cnpj: req.params.cnpj });
     res.json(empresa);
   } catch (error) {
     res.status(500).send({
@@ -31,6 +31,7 @@ router.get("/:cnpj", async (req, res) => {
     });
   }
 });
+
 
 //método POST "/empresa/" - Para incluir uma nova empresa
 const validaEmpresa = [
@@ -77,8 +78,10 @@ router.post("/", validaEmpresa, async (req, res) => {
   }
 });
 
+
+
 //PUT "/empresas" - Altera os dados de uma empresa
-router.put("/", validaEmpresa, async (req, res) => {
+router.put("/:cnpj", validaEmpresa, async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -86,14 +89,18 @@ router.put("/", validaEmpresa, async (req, res) => {
       errors: errors.array()
     });
   }
+s
+  let dados = req.body.nome;
+  let _cnpj = req.body.cnpj;
 
-  let dados = req.body;
-  await Empresa.findByIdAndUpdate(
-    req.body._id,
+  await Empresa.findOneAndUpdate(
+    {cnpj : {_cnpj}},
     {
       $set: dados
     },
-    { new: true }
+    {
+      new: true,
+    }
   )
     .then((empresa) => {
       res.send({ message: `Empresa ${empresa.nome} alterada com sucesso!` });
@@ -102,7 +109,7 @@ router.put("/", validaEmpresa, async (req, res) => {
       return res.status(500).send({
         errors: [
           {
-            message: `Não foi possivel alterar a empresa com o id ${req.body._id}`
+            message: `Não foi possivel alterar a empresa com o cnpj ${req.body.cnpj} ${error}`
           }
         ]
       });
@@ -111,7 +118,7 @@ router.put("/", validaEmpresa, async (req, res) => {
 
 //método DELETE "/"  - Delete uma empresa
 router.delete("/:cnpj", async (req, res) => {
-  await Empresa.findByIdAndRemove(req.params.id)
+  await Empresa.findByIdAndRemove(req.params.cnpj)
     .then((empresa) => {
       res.send({ message: `Empresa ${empresa.nome} removida com sucesso!` });
     })
@@ -119,7 +126,7 @@ router.delete("/:cnpj", async (req, res) => {
       return res.status(500).send({
         errors: [
           {
-            message: `Não foi possivel remover a categoria com o id ${req.params.cnpj}`
+            message: `Não foi possivel remover a categoria com o cnpj ${req.params.cnpj}`
           }
         ]
       });

@@ -1,3 +1,9 @@
+/**
+ * Uma string de conexão para o MongoDB.
+ * Aqui é inicializada a conexão através 
+ * da url de conexão no .env. 
+ */
+
 const mongoose = require("mongoose");
 
 const mongoUri = process.env.MONGODB_URI;
