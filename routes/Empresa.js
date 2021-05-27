@@ -59,13 +59,13 @@ rota.post("/", validaEmpresa, async (req, res) => {
   let empresa = await Empresa.findOne({ cnpj });
   if (empresa) {
     return res
-      .status(200)
+      .status(400)
       .json({ erros: [{ message: "Já existe uma empresa com este cnpj" }] });
   }
 
   try {
     //inserindo uma nova empresa 
-    let empresa = new Empresa(req .body);
+    let empresa = new Empresa(req.body);
     await empresa.save();
     res.send(empresa);
   } catch (error) {

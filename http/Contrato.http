@@ -1,0 +1,39 @@
+
+@baseUrl = http://localhost:4000
+
+//buscando todos os contratos
+###
+GET {{baseUrl}}/contratos
+Content-Type: application/json
+
+//Buscando contratos por um determinado municipio
+###
+GET {{baseUrl}}/contratos/municipio
+Content-Type: application/json
+
+{
+    "municipio": "Sorocaba"
+}
+
+###
+GET {{baseUrl}}/empresa
+Content-Type: application/json
+
+{
+    "empresa": "Empresa do João"
+}
+
+//inserindo contratos
+###
+POST {{baseUrl}}/contratos
+Content-Type: application/json
+
+{
+    "empresa": "Empresa de Fachada",
+    "municipio":"Porto Feliz",
+    "orgao":"CM",
+    "dataInicial":"10/10/2021",
+    "dataFinal":"12/12/21",
+    "valorMensal": 10.0000,
+    "objeto":"Software para Contabilidade"
+}
