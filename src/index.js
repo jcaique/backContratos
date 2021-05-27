@@ -8,6 +8,7 @@ inicializaMongoServer(); //iniciando o mongodb
 
 //definindo as rotas tas aplicação
 const rotasEmpresa = require("../routes/Empresa");
+const rotasMunicipios = require("../routes/Municipio"); 
 
 //inicializa o app a partir da biblioteca express
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.json());
 
 //primeira rota
 app.use("/empresas", rotasEmpresa);
+app.use("/municipios", rotasMunicipios);
 
 //ROTA PARA TRATAR ERROS 404, ELA DEVE SER SEMPRE A ULTIMA ROTRA INFORMADA
 app.use(function (req, res) {

@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:4000
+
+
+###
+GET {{baseUrl}}/municipios
+Content-Type: application/json
+
+
+###
+POST {{baseUrl}}/municipios
+Content-Type: application/json
+
+{
+    "nome" : "Zacarias"
+}

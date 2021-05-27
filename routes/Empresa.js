@@ -57,7 +57,6 @@ rota.post("/", validaEmpresa, async (req, res) => {
   //verificar se a empresa já existe
   const cnpj = req.body.cnpj; //quebrei a cabeça coloquei: cnpj = req.body
   let empresa = await Empresa.findOne({ cnpj });
-
   if (empresa) {
     return res
       .status(200)
@@ -65,13 +64,14 @@ rota.post("/", validaEmpresa, async (req, res) => {
   }
 
   try {
-    let empresa = new Empresa(req.body);
+    //inserindo uma nova empresa 
+    let empresa = new Empresa(req .body);
     await empresa.save();
     res.send(empresa);
   } catch (error) {
     return res.status(500).json({
       errors: [
-        { message: `Houve erro ao salvar a categoria! ${error.message}` }
+        { message: `Houve erro ao salvar a empresa! ${error.message}` }
       ]
     });
   }
