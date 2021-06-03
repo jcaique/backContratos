@@ -15,12 +15,12 @@ rota.get('/', async (req, res) => {
             })
         }
 
-        return res.status(200).json({
+        return res.status(200).send({
             quantidade: `${contratos.length}`,
             contratos
         })
     } catch (error) {
-        return res.status(500).send({
+        return res.status(500).json({
             message: 'Erro ao listar contratos.',
             erro: ` ${error}`
         })
