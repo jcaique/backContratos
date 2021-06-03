@@ -10,14 +10,13 @@
     "dotenv": "9.0.2",
     "express": "4.17.1",
     "express-validator": "6.11.1",
-    "mongoose": "5.12.9",
+    "mongoose": "^5.12.9",
     "mongoose-validator": "2.1.0"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
   },
   "keywords": [],
-
   "engines": {
     "node": "10.x"
   }
