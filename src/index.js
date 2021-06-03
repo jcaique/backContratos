@@ -4,12 +4,12 @@ require("dotenv").config();
 
 const inicializaMongoServer = require("../config/db");
 
-inicializaMongoServer(); //iniciando o mongodb
-
 //definindo as rotas tas aplicação
 const rotasEmpresa = require("../routes/Empresa");
 const rotasMunicipios = require("../routes/Municipio");
 const rotasContratos = require("../routes/Contrato");
+
+inicializaMongoServer(); //iniciando o mongodb
 
 //inicializa o app a partir da biblioteca express
 const app = express();
