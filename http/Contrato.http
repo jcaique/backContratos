@@ -1,6 +1,9 @@
 
 @baseUrl = http://localhost:4000
 
+@municipio = "Boituva"
+@empresa = "EMPRESA DO JOÃO"
+
 //buscando todos os contratos
 ###
 GET {{baseUrl}}/contratos
@@ -11,17 +14,10 @@ Content-Type: application/json
 GET {{baseUrl}}/contratos/municipio
 Content-Type: application/json
 
-{
-    "municipio": "Sorocaba"
-}
-
 ###
 GET {{baseUrl}}/empresa
 Content-Type: application/json
 
-{
-    "empresa": "Empresa do João"
-}
 
 //inserindo contratos
 ###

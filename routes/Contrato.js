@@ -17,8 +17,9 @@ rota.get("/", async (req, res) => {
 })
 
 //fazer um get de todos os contratos por cidade
-rota.get("/municipio", async (req, res) => {
-    const muni = req.body.municipio
+rota.get("/:municipio", async (req, res) => {
+    const muni = req.params.municipio
+
     try {
         let contratos = await Contrato.find({ municipio: muni })
 
@@ -34,18 +35,17 @@ rota.get("/municipio", async (req, res) => {
 })
 
 //fazer um get de todos os contratos por empresa
-rota.get("/empresa", async (req, res) => {
-    const empresa = req.body.empresa
+rota.get("/:empresa", async (req, res) => {
+    const _empresa = req.params.empresa
 
     try {
-        const contratos = await Contrato.find({ empresa })
+        const contratos = await Contrato.find({ empresa : _empresa })
         res.status(200).json(contratos)
     } catch (error) {
         return res.status(400).json({
             message: `Não foi possivel obter os contratos ${error}!`
         })
     }
-
 })
 
 //incluir um contrato

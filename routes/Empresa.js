@@ -16,16 +16,22 @@ rota.get("/", async (req, res) => {
   }
 });
 
-//método GET "/empresas/:cnpj" - Lista uma empresa de um determinado cnpj
+//método GET "/empresas/cnpj" - Lista uma empresa de um determinado cnpj
 rota.get("/:cnpj", async (req, res) => {
   try {
-    const empresa = await Empresa.find({ cnpj: req.params.cnpj });
-    res.json(empresa);
+    const _pCnpj = req.params.cnpj
+    const empresa = await Empresa.find({ cnpj: _pCnpj });
+
+    if (empresa.length === 0 ){
+      res.status(400).json({ Message: "CNPJ informado nao encontrado!"})
+    }
+
+    res.status(200).json(empresa);
   } catch (error) {
     res.status(500).send({
       errors: [
         {
-          message: `A empresa com o cnpj ${req.params.cnpj} solicitada, não foi encontrada! ${error.message}`
+          message: `Erro ao solicitar empresa ${req.params.cnpj} ${error.message}`
         }
       ]
     });
@@ -60,13 +66,14 @@ rota.post("/", validaEmpresa, async (req, res) => {
   if (empresa) {
     return res
       .status(400)
-      .json({ erros: [{ message: "Já existe uma empresa com este cnpj" }] });
+      .json({ erros: "Já existe uma empresa com este cnpj" });
   }
 
   try {
     //inserindo uma nova empresa 
     let empresa = new Empresa(req.body);
     await empresa.save();
+    
     res.send(empresa);
   } catch (error) {
     return res.status(500).json({
@@ -76,8 +83,6 @@ rota.post("/", validaEmpresa, async (req, res) => {
     });
   }
 });
-
-
 
 //PUT "/empresas" - Altera os dados de uma empresa
 rota.put("/:cnpj", validaEmpresa, async (req, res) => {
@@ -92,8 +97,8 @@ rota.put("/:cnpj", validaEmpresa, async (req, res) => {
   //fazendo uma busca no banco para ver se existe o cnpj informado
   let empresa = await Empresa.findOne({ cnpj : req.params.cnpj })
   if (!empresa) {
-    return res //caso exista é retornado o cod de erro 200
-      .status(200)
+    return res //caso nao exista é retornado o cod de erro 400
+      .status(400)
       .json({ erros: [{ message: "CNPJ informado não encontrado!" }] });
   }
 
