@@ -10,12 +10,14 @@ const mongoUri = process.env.MONGODB_URI;
 
 const inicializaMongoServer = async () => {
   try {
-    await mongoose.createConnection(mongoUri, {
+
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true
     });
+
     console.log("Mongo conectado!");
   } catch (e) {
     console.error(e);

@@ -16,7 +16,7 @@ rota.get('/', async (req, res) => {
         }
 
         return res.status(200).send({
-            quantidade: `${contratos.length}`,
+            total: `${contratos.length}`,
             contratos
         })
     } catch (error) {
