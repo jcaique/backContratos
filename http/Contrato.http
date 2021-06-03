@@ -1,31 +1,33 @@
 
 @baseUrl = http://localhost:4000
 
-@municipio = "Boituva"
-@empresa = "EMPRESA DO JOÃO"
-
-//buscando todos os contratos
+//Listar todos os contratos
 ###
 GET {{baseUrl}}/contratos
 Content-Type: application/json
 
-//Buscando contratos por um determinado municipio
+//Listar contratos por municipio
 ###
-GET {{baseUrl}}/contratos/municipio
+GET {{baseUrl}}/contratos/municipio/sorocaba
 Content-Type: application/json
 
+//Listar contratos por empresa
 ###
-GET {{baseUrl}}/empresa
+GET {{baseUrl}}/contratos/empresa/empresay
 Content-Type: application/json
 
+//Lista contrato por id
+###
+GET {{baseUrl}}/contratos/id/60af1141da0666397ed1e8ac
+Content-Type: application/json
 
-//inserindo contratos
+//inserindo 1 contrato
 ###
 POST {{baseUrl}}/contratos
 Content-Type: application/json
 
 {
-    "empresa": "Empresa de Fachada",
+    "empresa": "EmpresaY",
     "municipio":"Porto Feliz",
     "orgao":"CM",
     "dataInicial":"10/10/2021",

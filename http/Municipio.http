@@ -6,13 +6,9 @@ GET {{baseUrl}}/municipios
 Content-Type: application/json
 
 ###
-GET {{baseUrl}}/municipio
-Content-Type: application/json
-
-###
 POST {{baseUrl}}/municipios
 Content-Type: application/json
 
 {
-    "nome" : "Zacarias"
+    "nome" : "caiquee"
 }

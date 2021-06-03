@@ -1,92 +1,140 @@
-const express = require("express")
+const express = require('express')
 const rota = express.Router();
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require('express-validator');
 
-const Contrato = require("../model/Contrato")
+const Contrato = require('../model/Contrato')
 
-//Obter todos os contratos
-rota.get("/", async (req, res) => {
+//Obter todos os contratos 
+rota.get('/', async (req, res) => {
     try {
         const contratos = await Contrato.find()
-        res.json(contratos)
+
+        if (contratos.length === 0) {
+            return res.status(404).json({
+                message: 'Não há contratos registrados.'
+            })
+        }
+
+        return res.status(200).json({
+            quantidade: `${contratos.length}`,
+            contratos
+        })
     } catch (error) {
-        res.status(500).send({
-            errors: [{ message: `Não foi possivel obter os contratos! ${error}` }]
+        return res.status(500).send({
+            message: 'Erro ao listar contratos.',
+            erro: ` ${error}`
         })
     }
 })
 
-//fazer um get de todos os contratos por cidade
-rota.get("/:municipio", async (req, res) => {
-    const muni = req.params.municipio
+//Obter contratos por cidade
+rota.get('/municipio/:municipio', async (req, res) => {
+    const pMunicipio = req.params.municipio
 
     try {
-        let contratos = await Contrato.find({ municipio: muni })
+        let contratos = await Contrato.find({ municipio: pMunicipio })
 
         if (contratos.length === 0)
-            return res.status(400).json({ Message: `Não há contratos cadastrados para este município` })
+            return res.status(404).json({
+                message: 'Não há contratos cadastrados para este município.',
+                municipio: `${pMunicipio}`
+            })
 
-        res.status(200).json(contratos)
+        return res.status(200).json({
+            total: `${contratos.length}`,
+            contratos
+        })
     } catch (error) {
-        return res.status(400).json({
-            message: `Não foi possivel obter os contratos ${error}`
+        return res.status(500).json({
+            message: 'Erro ao obter contratos',
+            erro: `${error}`
         })
     }
 })
 
-//fazer um get de todos os contratos por empresa
-rota.get("/:empresa", async (req, res) => {
+//Obter contratos por empresa
+rota.get('/empresa/:empresa', async (req, res) => {
+
     const _empresa = req.params.empresa
 
     try {
-        const contratos = await Contrato.find({ empresa : _empresa })
-        res.status(200).json(contratos)
+        const contratos = await Contrato.find({ empresa: _empresa })
+
+        if (contratos.length === 0) {
+            return res.status(404).json({
+                message: 'Não há contratos registrados para essa empresa.',
+                empresa: _empresa
+            })
+        }
+
+        return res.status(200).json(contratos)
     } catch (error) {
-        return res.status(400).json({
-            message: `Não foi possivel obter os contratos ${error}!`
+        return res.status(500).json({
+            message: 'Erro ao obter contratos por empresa.',
+            erro: `${error}`
+        })
+    }
+})
+
+//Contrato por seu id
+rota.get('/id/:_id', async (req, res) => {
+    const _id = req.params._id;
+
+    try {
+        const contrato = await Contrato.findById({ _id: _id });
+
+        if (contrato.length === 0) {
+            return res.status(404).json({
+                message: 'Contrato não encontrado.',
+                id: `${_id}`
+            })
+        }
+
+        return res.status(200).json(contrato);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Erro ao solicitar contrato.',
+            erro: `${error}`
         })
     }
 })
 
 //incluir um contrato
 const validaContatro = [
-    check("dataInicial", "dtInicial Precisa ser uma data valida").isDate(),
-    check("dataFinal", "dtFinal Precisa ser uma data valida").isDate(),
-    check("empresa", "Empresa precisa ser valida").matches(/^[A-Za-z\s]+$/),
-    check("municipio", "Municipio precisa ser valido").matches(/^[A-Za-z\s]+$/),
-    check("orgao", "Precisa ser pm ou cm").isIn(['PM', 'CM'])
+    check('dataInicial', 'dtInicial Precisa ser uma data valida.').isDate(),
+    check('dataFinal', 'dtFinal Precisa ser uma data valida.').isDate(),
+    check('empresa', 'Empresa precisa ser valida.').matches(/^[A-Za-z\s]+$/),
+    check('municipio', 'Municipio precisa ser válido.').matches(/^[A-Za-z\s]+$/),
+    check('orgao', 'Orgão precisa ser PM ou CM.').isIn(['PM', 'CM']),
+    check('valorMensal', 'Valor precisa ser numerico.').isNumeric(),
 ]
 
 rota.post('/', validaContatro, async (req, res) => {
     const erros = validationResult(validaContatro)
 
     if (!erros.isEmpty()) {
-        return res
-            .status(400)
-            .json({ errors: erros.array() })
+        return res.status(400).json({
+            errors: erros.array()
+        })
     }
 
     if (Date.parse(req.body.dataFinal) < Date.parse(req.body.dataInicial)) {
-        return res
-            .status(400)
-            .json({
-                erros: [{ message: `Data final inferior a data inicial!` }
-                ]
-            })
+        return res.status(400).json({
+            message: 'Data final inferior a data inicial.',
+        })
     }
 
     try {
         let contrato = new Contrato(req.body)
         await contrato.save();
 
-        res.status(200).json({
-            message: `Contrato salvo com sucesso!`
+        return res.status(200).json({
+            message: 'Contrato incluído com sucesso.'
         })
     } catch (error) {
         return res.status(500).json({
-            erros: [{
-                message: `Erro ao incluir contrato ${error}`
-            }]
+            message: 'Erro ao incluir contrato.',
+            erro: `${error}`
         })
     }
 })

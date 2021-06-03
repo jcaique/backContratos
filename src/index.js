@@ -39,7 +39,14 @@ app.use(function (req, res, next) {
 //backend fará o parse  do json
 app.use(express.json());
 
-//primeira rota
+app.get('/', async (req, res) =>{
+  res.json({
+    message: 'API Contratos!',
+    authotr: 'jcaique',
+    version: '1.0.0'
+  })
+})
+
 app.use("/empresas", rotasEmpresa);
 app.use("/municipios", rotasMunicipios);
 app.use("/contratos", rotasContratos);
@@ -47,7 +54,7 @@ app.use("/contratos", rotasContratos);
 //ROTA PARA TRATAR ERROS 404, ELA DEVE SER SEMPRE A ULTIMA ROTRA INFORMADA
 app.use(function (req, res) {
   res.status(404).json({
-    mensagem: `A rota ${req.originUri} não existe!`
+    mensagem: `A rota ${req.baseUrl} não existe!`
   });
 });
 

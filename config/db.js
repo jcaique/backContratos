@@ -13,7 +13,7 @@ const inicializaMongoServer = async () => {
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
       useUnifiedTopology: true
     });
     console.log("Mongo conectado!");
