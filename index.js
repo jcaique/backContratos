@@ -43,7 +43,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.json({
     message: 'API Contratos!',
-    authotr: 'jcaique',
+    author: 'jcaique',
     version: '1.0.0'
   })
 })
